@@ -18,11 +18,11 @@ async def start(client, message):
     await db.add_user(client, message)
     button = InlineKeyboardMarkup([[
         InlineKeyboardButton(
-            '⛅ ᴜᴘᴅᴀᴛᴇs', url='https://t.me/KPSBots')
+            '⛅ ᴜᴘᴅᴀᴛᴇs', url='https://t.me/IonosHUb')
     ], [
         InlineKeyboardButton('❄️ ᴀʙᴏᴜᴛ', callback_data='about'),
         InlineKeyboardButton('❗ ʜᴇʟᴘ', callback_data='help')
-    ]])
+    ]]
     if Config.START_PIC:
         await message.reply_photo(Config.START_PIC, caption=Txt.START_TXT.format(user.mention), reply_markup=button)
     else:
@@ -63,7 +63,7 @@ async def cb_handler(client, query: CallbackQuery):
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([[
                 InlineKeyboardButton(
-                    '⛅ Uᴩᴅᴀᴛᴇꜱ', url='https://t.me/KPSBots')
+                    '⛅ Uᴩᴅᴀᴛᴇꜱ', url='https://t.me/IonosHUB')
             ], [
                 InlineKeyboardButton('❄️ ᴀʙᴏᴜᴛ', callback_data='about'),
                 InlineKeyboardButton('❗ ʜᴇʟᴘ', callback_data='help')
