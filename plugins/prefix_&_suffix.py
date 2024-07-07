@@ -6,7 +6,7 @@ from helper.database import db
 async def add_caption(client, message):
 
     if len(message.command) == 1:
-        return await message.reply_text("**__Give The Prefix__\n\nExᴀᴍᴩʟᴇ: `/set_prefix @Roofiverse`**")
+        return await message.reply_text("**__Give The Prefix__\n\nExᴀᴍᴩʟᴇ: `/set_prefix IonosHUb`**")
     prefix = message.text.split(" ", 1)[1]
     SnowDev = await message.reply_text("Please Wait ...", reply_to_message_id=message.id)
     await db.set_prefix(message.from_user.id, prefix)
