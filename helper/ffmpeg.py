@@ -246,7 +246,7 @@ async def encode(filepath, message, msg):
             watermark += '-vf '
         else:
             watermark += ','
-        watermark += 'subtitles=VideoEncoder/utils/extras/watermark.ass
+        watermark += 'subtitles=Metadata/plugins/settings.py
     # Hard Subs
     if h:
         if r == 'OG':
