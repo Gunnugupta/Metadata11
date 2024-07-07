@@ -16,6 +16,60 @@ class Config(object):
     STRING_API_HASH = os.environ.get("STRING_API_HASH", "")
     STRING_SESSION = os.environ.get("STRING_SESSION", "")
 
+    logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
+
+# List of authorized user IDs
+AUTHORIZED_USERS = {6704116482, }  # Add your initial authorized user IDs here
+
+# List of admin user IDs
+ADMIN_USERS = {6704116482}  # Add your admin user IDs here
+
+def restricted(func):
+    def wrapped(update: Update, context: CallbackContext, *args, **kwargs):
+        user_id = update.effective_user.id
+        if user_id not in AUTHORIZED_USERS:
+            logger.warning(f"Unauthorized access denied for {user_id}.")
+            update.message.reply_text("Unauthorized access!")
+            return
+        return func(update, context, *args, **kwargs)
+    return wrapped
+
+def admin_only(func):
+    def wrapped(update: Update, context: CallbackContext, *args, **kwargs):
+        user_id = update.effective_user.id
+        if user_id not in ADMIN_USERS:
+            logger.warning(f"Admin access denied for {user_id}.")
+            update.message.reply_text("Admin access required!")
+            return
+        return func(update, context, *args, **kwargs)
+    return wrapped
+
+@restricted
+def start(update: Update, context: CallbackContext):
+    update.message.reply_text("Hi! Welcome to the restricted bot.")
+
+@restricted
+def help_command(update: Update, context: CallbackContext):
+    update.message.reply_text("Help message.")
+
+@admin_only
+def add_user(update: Update, context: CallbackContext):
+    if not context.args:
+        update.message.reply_text("Usage: /add_user <user_id>")
+        return
+
+    try:
+        user_id = int(context.args[0])
+        AUTHORIZED_USERS.add(user_id)
+        update.message.reply_text(f"User {user_id} has been authorized.")
+        logger.info(f"User {user_id} added to authorized users by admin {update.effective_user.id}.")
+    except ValueError:
+        update.message.reply_text("Invalid user ID. Please enter a numeric user ID.")
+
     # database config
     DB_NAME = os.environ.get("DB_NAME", "Cluster0")
     DB_URL = os.environ.get("DB_URL", "mongodb+srv://rename:rename@cluster0.uzqu6ce.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")  # ⚠️ Required
