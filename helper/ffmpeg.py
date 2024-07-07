@@ -1,9 +1,28 @@
-import time
-import os
 import asyncio
-from PIL import Image
+import json
+import math
+import os
+import re
+import subprocess
+import time
+
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+import ffmpeg
+
+from .. import LOGGER, download_dir, encode_dir
+from .database.access_db import db
+from .display_progress import TimeFormatter
+
+
+def get_codec(filepath, channel='v:0'):
+    output = subprocess.check_output(['ffprobe', '-v', 'error', '-select_streams', channel,
+                                      '-show_entries', 'stream=codec_name,codec_tag_string', '-of',
+                                      'default=nokey=1:noprint_wrappers=1', filepath])
+    return output.decode('utf-8').split()
+
 
 async def fix_thumb(thumb):
     width = 0
